@@ -126,7 +126,13 @@ def render_graph(df, weight_ratio):
             hovertemplate="%{customdata}"
         )]
     fig = go.Figure(data=dat)
+
     fig.update_traces(line={'width':1})
     fig.update_traces(selector=0, line={'color': 'black', 'width':3})
+    fig.update_layout(
+        legend=dict(
+            x=1,y=-0.5,xanchor='right',yanchor='top'
+        ),
+    )
     return fig
 
