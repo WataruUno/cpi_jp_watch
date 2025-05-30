@@ -99,7 +99,7 @@ def render_display_setting(base_month_option, base_month_default, area):
     item = st.selectbox(
         "項目",
         ('指数(基準月比%)', '前年同月比%'),
-        index=0,
+        index=1,
         key=f"item_selectbox_{area}"
     )
     base_month = None
@@ -114,7 +114,10 @@ def render_display_setting(base_month_option, base_month_default, area):
         base_month += '-01'
     return item, base_month
 
-def render_graph(df, weight_ratio):
+def render_graph(df, weight_ratio, content, item):
+    if len(df) == 0:
+        st.write('基準月のデータがありません。')
+        return None
     dat = []
     for i, column in enumerate(df.columns):
         name = column.split()[1]
@@ -138,5 +141,23 @@ def render_graph(df, weight_ratio):
         width=700,
         height=700
     )
-    return fig
+    st.subheader(
+        f'{content} の価格指数({item})',
+        help="'Autoscale'ボタンでズームアウト(2000年以降を表示)"
+    )
+    st.write("()内の数字はウェイト")
+    fig.update_layout(
+        xaxis_title='',
+        yaxis_title=item
+    )
+    latest = df.index[-1]
+    m = df.loc[latest-pd.Timedelta(weeks=53): latest].min().min()
+    M = df.loc[latest-pd.Timedelta(weeks=53): latest].max().max()
+    m *= 110 if m < 0 else 90
+    M *= 90 if M < 0 else 110
+    fig.update_layout(
+        xaxis=dict(range=[latest-pd.Timedelta(weeks=53), latest]),
+        yaxis=dict(range=[m, M])
+    )
+    st.plotly_chart(fig)
 
