@@ -34,7 +34,7 @@ with jp:
         st.write('#### 表示')
         item, base_month = render_display_setting(
             base_month_option=list(map("{:%Y-%m}".format, data['cpi']['全国'].index.get_level_values('month').unique())),
-            base_month_default='2020-01', area='全国'
+            base_year_default='2024', area='全国'
         )
 
         if item == '指数(基準月比%)':
@@ -61,7 +61,7 @@ with tokyo:
         st.write('#### 表示')
         item, base_month = render_display_setting(
             base_month_option=list(map("{:%Y-%m}".format, data['cpi']['東京都区部'].index.get_level_values('month').unique())),
-            base_month_default='2020-01', area='東京都区部')
+            base_year_default='2024', area='東京都区部')
 
         if item == '指数(基準月比%)':
             df = (df - df.loc[base_month]) / df.loc[base_month]

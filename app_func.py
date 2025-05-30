@@ -95,7 +95,7 @@ def render_item_option_and_extract_data(weight, cpi, area):
         i += 1
     return levels, df, weight_ratio
 
-def render_display_setting(base_month_option, base_month_default, area):
+def render_display_setting(base_month_option, base_year_default, area):
     item = st.selectbox(
         "項目",
         ('指数(基準月比%)', '前年同月比%'),
@@ -104,14 +104,23 @@ def render_display_setting(base_month_option, base_month_default, area):
     )
     base_month = None
     if item == '指数(基準月比%)':
-        index = base_month_option.index(base_month_default)
+        year_option = sorted(list(set(map(lambda x: x[:4], base_month_option))))
+        year_index = year_option.index(base_year_default)
+        base_year = st.selectbox(
+            "基準(年)",
+            year_option,
+            index=year_index,
+            key=f"base_year_selectbox_{area}"
+        )
+        month_option = filter(lambda x: x.startswith(base_year), base_month_option)
+        month_option = list(map(lambda x: x[6:8], month_option))
         base_month = st.selectbox(
-            "基準月",
-            base_month_option,
-            index=index,
+            "基準(月)",
+            month_option,
+            index=0,
             key=f"base_month_selectbox_{area}"
         )
-        base_month += '-01'
+        base_month = f'{base_year}-{base_month}-01'
     return item, base_month
 
 def render_graph(df, weight_ratio, content, item):
