@@ -37,7 +37,7 @@ with jp:
             base_year_default='2024', area='全国'
         )
 
-        if item == '指数(基準月比%)':
+        if item == '基準月比%':
             df = (df - df.loc[base_month]) / df.loc[base_month]
         else:
             df = (df - df.shift(12)) / df.shift(12)
@@ -63,7 +63,7 @@ with tokyo:
             base_month_option=list(map("{:%Y-%m}".format, data['cpi']['東京都区部'].index.get_level_values('month').unique())),
             base_year_default='2024', area='東京都区部')
 
-        if item == '指数(基準月比%)':
+        if item == '基準月比%':
             df = (df - df.loc[base_month]) / df.loc[base_month]
         else:
             df = (df - df.shift(12)) / df.shift(12)

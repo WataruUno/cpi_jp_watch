@@ -98,12 +98,12 @@ def render_item_option_and_extract_data(weight, cpi, area):
 def render_display_setting(base_month_option, base_year_default, area):
     item = st.selectbox(
         "項目",
-        ('指数(基準月比%)', '前年同月比%'),
+        ('基準月比%', '前年同月比%'),
         index=1,
         key=f"item_selectbox_{area}"
     )
     base_month = None
-    if item == '指数(基準月比%)':
+    if item == '基準月比%':
         year_option = sorted(list(set(map(lambda x: x[:4], base_month_option))))
         year_index = year_option.index(base_year_default)
         base_year = st.selectbox(
