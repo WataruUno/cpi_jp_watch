@@ -118,8 +118,10 @@ def render_graph(df, weight_ratio):
     dat = []
     for i, column in enumerate(df.columns):
         name = column.split()[1]
-        if i != 0:
+        try:
             name = f"{column.split()[1]}({weight_ratio[column]:.2%})"
+        except:
+            main_i = i
         dat += [go.Scatter(
             x=df.index, y=df[column] * 100, name=name,
             customdata=df.apply(lambda x: f"{x.name:%Y-%m} {x[column]:.2%}", axis=1),
@@ -128,11 +130,13 @@ def render_graph(df, weight_ratio):
     fig = go.Figure(data=dat)
 
     fig.update_traces(line={'width':1})
-    fig.update_traces(selector=0, line={'color': 'black', 'width':3})
+    fig.update_traces(selector=main_i, line={'color': 'black', 'width':3})
     fig.update_layout(
         legend=dict(
-            x=1,y=-0.5,xanchor='right',yanchor='top'
+            x=1,y=-0.1,xanchor='right',yanchor='top'
         ),
+        width=700,
+        height=700
     )
     return fig
 

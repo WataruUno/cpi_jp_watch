@@ -42,6 +42,7 @@ with jp:
         else:
             df = (df - df.shift(12)) / df.shift(12)
         df = df.dropna()
+        df = df.sort_values(df.index[-1], axis=1, ascending=False)
     
     with st.container(border=True):
         fig = render_graph(df, weight_ratio)
@@ -51,8 +52,8 @@ with jp:
         )
         st.write("()内の数字はウェイト")
         fig.update_layout(
-            xaxis=dict(range=['2019-12-01', df.index[-1]]),
-            xaxis_title='月',
+            xaxis=dict(range=[df.index[-12], df.index[-1]]),
+            xaxis_title='',
             yaxis_title=item
         )
         st.plotly_chart(fig)
@@ -84,8 +85,8 @@ with tokyo:
         )
         st.write("()内の数字はウェイト")
         fig.update_layout(
-            xaxis=dict(range=['2019-12-01', df.index[-1]]),
-            xaxis_title='月',
+            xaxis=dict(range=[df.index[-12], df.index[-1]]),
+            xaxis_title='',
             yaxis_title=item
         )
         st.plotly_chart(fig)
